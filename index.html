@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Voting</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 50px;
+    }
+    form {
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Vote for Your Favorite Event</h2>
+  <form id="voteForm">
+    <label for="phone">Phone Number:</label><br>
+    <input type="tel" id="phone" name="phone" placeholder="e.g. +1234567890" required><br><br>
+
+    <label for="event">Choose Event:</label><br>
+    <select id="event" name="event" required>
+      <option value="beauty_pageant">Beauty Pageant</option>
+      <option value="poetry_slam">Poetry Slam</option>
+      <option value="fashion_show">Fashion Show</option>
+      <option value="spoken_word">Spoken Word</option>
+    </select><br><br>
+
+    <button type="submit">Vote</button>
+  </form>
+  <p id="responseMessage"></p>
+
+  <script>
+    document.getElementById('voteForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const phone = document.getElementById('phone').value;
+      const event = document.getElementById('event').value;
+
+      const response = await fetch('/api/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, event })
+      });
+
+      const result = await response.json();
+      document.getElementById('responseMessage').innerText = result.message;
+    });
+  </script>
+</body>
+</html>
